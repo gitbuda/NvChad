@@ -350,4 +350,12 @@ return packer.startup(function()
          require("core.mappings").vim_fugitive()
       end,
    }
+
+   use {
+      "ntpeters/vim-better-whitespace"
+   }
+
+   use {
+      "itspriddle/vim-shellcheck"
+   }
 end)
