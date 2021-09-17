@@ -69,29 +69,20 @@ components.active[1][1] = {
 
    right_sep = { str = statusline_style.right, hl = {
       fg = colors.nord_blue,
-      bg = colors.one_bg2,
+      bg = colors.lightbg,
    } },
 }
 
 components.active[1][2] = {
-   provider = statusline_style.right,
-
-   hl = {
-      fg = colors.one_bg2,
-      bg = colors.lightbg,
-   },
-}
-
-components.active[1][3] = {
    provider = function()
       local filename = vim.fn.expand "%:t"
       local extension = vim.fn.expand "%:e"
       local icon = require("nvim-web-devicons").get_icon(filename, extension)
       if icon == nil then
-         icon = ""
+         icon = " "
          return icon
       end
-      return icon .. " " .. filename .. " "
+      return " " .. icon .. " " .. filename .. " "
    end,
    hl = {
       fg = colors.white,
@@ -101,7 +92,7 @@ components.active[1][3] = {
    right_sep = { str = statusline_style.right, hl = { fg = colors.lightbg, bg = colors.lightbg2 } },
 }
 
-components.active[1][4] = {
+components.active[1][3] = {
    provider = function()
       local dir_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
       return "  " .. dir_name .. " "
@@ -117,7 +108,7 @@ components.active[1][4] = {
    } },
 }
 
-components.active[1][5] = {
+components.active[1][4] = {
    provider = "git_diff_added",
    hl = {
       fg = colors.grey_fg2,
@@ -126,7 +117,7 @@ components.active[1][5] = {
    icon = " ",
 }
 -- diffModfified
-components.active[1][6] = {
+components.active[1][5] = {
    provider = "git_diff_changed",
    hl = {
       fg = colors.grey_fg2,
@@ -135,7 +126,7 @@ components.active[1][6] = {
    icon = "   ",
 }
 -- diffRemove
-components.active[1][7] = {
+components.active[1][6] = {
    provider = "git_diff_removed",
    hl = {
       fg = colors.grey_fg2,
@@ -144,7 +135,7 @@ components.active[1][7] = {
    icon = "  ",
 }
 
-components.active[1][8] = {
+components.active[1][7] = {
    provider = "diagnostic_errors",
    enabled = function()
       return lsp.diagnostics_exist "Error"
@@ -153,7 +144,7 @@ components.active[1][8] = {
    icon = "  ",
 }
 
-components.active[1][9] = {
+components.active[1][8] = {
    provider = "diagnostic_warnings",
    enabled = function()
       return lsp.diagnostics_exist "Warning"
@@ -162,7 +153,7 @@ components.active[1][9] = {
    icon = "  ",
 }
 
-components.active[1][10] = {
+components.active[1][9] = {
    provider = "diagnostic_hints",
    enabled = function()
       return lsp.diagnostics_exist "Hint"
@@ -171,7 +162,7 @@ components.active[1][10] = {
    icon = "  ",
 }
 
-components.active[1][11] = {
+components.active[1][10] = {
    provider = "diagnostic_info",
    enabled = function()
       return lsp.diagnostics_exist "Information"
@@ -225,61 +216,12 @@ components.active[3][1] = {
 }
 
 components.active[3][2] = {
-   -- taken from: https://github.com/hoob3rt/lualine.nvim/blob/master/lua/lualine/components/branch.lua
-   provider = function()
-      local git_branch = ""
-
-      -- first try with gitsigns
-      local gs_dict = vim.b.gitsigns_status_dict
-      if gs_dict then
-         git_branch = (gs_dict.head and #gs_dict.head > 0 and gs_dict.head) or git_branch
-      else
-         -- path seperator
-         local branch_sep = package.config:sub(1, 1)
-         -- get file dir so we can search from that dir
-         local file_dir = vim.fn.expand "%:p:h" .. ";"
-         -- find .git/ folder genaral case
-         local git_dir = vim.fn.finddir(".git", file_dir)
-         -- find .git file in case of submodules or any other case git dir is in
-         -- any other place than .git/
-         local git_file = vim.fn.findfile(".git", file_dir)
-         -- for some weird reason findfile gives relative path so expand it to fullpath
-         if #git_file > 0 then
-            git_file = vim.fn.fnamemodify(git_file, ":p")
-         end
-         if #git_file > #git_dir then
-            -- separate git-dir or submodule is used
-            local file = io.open(git_file)
-            git_dir = file:read()
-            git_dir = git_dir:match "gitdir: (.+)$"
-            file:close()
-            -- submodule / relative file path
-            if git_dir:sub(1, 1) ~= branch_sep and not git_dir:match "^%a:.*$" then
-               git_dir = git_file:match "(.*).git" .. git_dir
-            end
-         end
-
-         if #git_dir > 0 then
-            local head_file = git_dir .. branch_sep .. "HEAD"
-            local f_head = io.open(head_file)
-            if f_head then
-               local HEAD = f_head:read()
-               f_head:close()
-               local branch = HEAD:match "ref: refs/heads/(.+)$"
-               if branch then
-                  git_branch = branch
-               else
-                  git_branch = HEAD:sub(1, 6)
-               end
-            end
-         end
-      end
-      return (git_branch ~= "" and "  " .. git_branch) or git_branch
-   end,
+   provider = "git_branch",
    hl = {
       fg = colors.grey_fg2,
       bg = colors.statusline_bg,
    },
+   icon = "  ",
 }
 
 components.active[3][3] = {
@@ -392,7 +334,9 @@ components.active[3][10] = {
 }
 
 require("feline").setup {
-   default_bg = colors.statusline_bg,
-   default_fg = colors.fg,
+   colors = {
+      bg = colors.statusline_bg,
+      fg = colors.fg,
+   },
    components = components,
 }

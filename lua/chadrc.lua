@@ -15,7 +15,7 @@ M.ui = {
       enabled = false,
       fav_themes = {
          "onedark",
-         "gruvchad",
+         "one-light",
       },
    },
 
@@ -212,6 +212,13 @@ M.custom.mappings = {
    --    "<leader>cc",
    --    "gg0vG$d",
    -- },
+}
+
+M.plugins = {
+   lspconfig = {
+      -- servers = {"html", "cssls"}
+      servers = {},
+   },
 }
 
 return M

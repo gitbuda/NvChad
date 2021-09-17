@@ -53,7 +53,7 @@ M.misc = function()
       end
 
       -- check the theme toggler
-      if config.ui.theme_toggler then
+      if config.ui.theme_toggler.enabled then
          map(
             "n",
             maps.theme_toggler,
@@ -119,10 +119,6 @@ M.misc = function()
 end
 
 -- below are all plugin related mappings
-
-M.better_escape = function()
-   vim.g.better_escape_shortcut = plugin_maps.better_escape.esc_insertmode or { "" }
-end
 
 M.bufferline = function()
    local m = plugin_maps.bufferline
