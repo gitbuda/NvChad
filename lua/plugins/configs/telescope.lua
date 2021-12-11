@@ -1,4 +1,5 @@
 local present, telescope = pcall(require, "telescope")
+
 if not present then
    return
 end
@@ -38,7 +39,7 @@ telescope.setup {
       file_ignore_patterns = { "build/*", "node_modules/*" },
       file_ignore_patterns = { "node_modules" },
       generic_sorter = require("telescope.sorters").get_generic_fuzzy_sorter,
-      path_display = { "absolute" },
+      path_display = { "truncate" },
       winblend = 0,
       border = {},
       borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
