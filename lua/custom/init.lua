@@ -59,6 +59,11 @@ end)
 
 -- Use build as a make directory
 vim.cmd [[ let &makeprg="(cd build && make -j8)" ]]
+vim.cmd [[
+   function! UpdateMakePrgBuildDir(path)
+      let &makeprg="(cd ".a:path." && make -j8)"
+   endfunction
+]]
 
 -- Bruteforce lsp-config mappings because the buffer ones doesn't work for some reason
 local function set_keymap(...) vim.api.nvim_set_keymap(...) end
