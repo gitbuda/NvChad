@@ -34,6 +34,7 @@ M.options = {
       copy_del = true, -- copy deleted text ( dd key ), visual and normal mode
       insert_nav = true, -- navigation in insertmode
       window_nav = true,
+      terminal_numbers = false,
 
       -- updater
       update_url = "https://github.com/NvChad/NvChad",
@@ -45,6 +46,7 @@ M.options = {
 
 M.ui = {
    hl_override = "", -- path of your file that contains highlights
+   colors = "", -- path of your file that contains colors
    italic_comments = false,
    theme = "onedark", -- default theme
 
@@ -62,14 +64,13 @@ M.plugins = {
       bufferline = true, -- manage and preview opened buffers
       colorizer = false, -- color RGB, HEX, CSS, NAME color codes
       comment = true, -- easily (un)comment code, language aware
-      dashboard = false,
+      alpha = false, -- dashboard
       better_escape = true, -- map to <ESC> with no lag
       feline = true, -- statusline
       gitsigns = true,
       lspsignature = true, -- lsp enhancements
       vim_matchup = true, -- improved matchit
       cmp = true,
-      snippets = false,
       nvimtree = true,
       autopairs = true,
    },
@@ -95,9 +96,9 @@ M.plugins = {
          -- hide, show on specific filetypes
          hidden = {
             "help",
-            "dashboard",
             "NvimTree",
             "terminal",
+            "alpha",
          },
          shown = {},
 
@@ -123,10 +124,9 @@ M.mappings = {
    misc = {
       cheatsheet = "<leader>ch",
       close_buffer = "<leader>x",
-      copy_whole_file = "<C-a>", -- copy all contents of current buffer
-      copy_to_system_clipboard = "<C-c>", -- copy selected text (visual mode) or curent line (normal)
-      line_number_toggle = "<leader>n", -- toggle line number
-      relative_line_number_toggle = "<leader>rn",
+      cp_whole_file = "<C-y>", -- copy all contents of current buffer
+      lineNR_toggle = "<leader>n", -- toggle line number
+      lineNR_rel_toggle = "<leader>rn",
       update_nvchad = "<leader>uu",
       new_buffer = "<S-t>",
       new_tab = "<C-t>b",
@@ -180,14 +180,6 @@ M.mappings.plugins = {
    },
    comment = {
       toggle = "<leader>/",
-   },
-
-   dashboard = {
-      bookmarks = "<leader>bm",
-      new_file = "<leader>fn", -- basically create a new buffer
-      open = "<leader>db", -- open dashboard
-      session_load = "<leader>l",
-      session_save = "<leader>s",
    },
 
    -- map to <ESC> with no lag

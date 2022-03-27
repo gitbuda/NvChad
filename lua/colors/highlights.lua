@@ -1,6 +1,5 @@
 local cmd = vim.cmd
 
-local override = require("core.utils").load_config().ui.hl_override
 local colors = require("colors").get()
 local ui = require("core.utils").load_config().ui
 
@@ -12,6 +11,7 @@ local folder_bg = colors.folder_bg
 local green = colors.green
 local grey = colors.grey
 local grey_fg = colors.grey_fg
+local light_grey = colors.light_grey
 local line = colors.line
 local nord_blue = colors.nord_blue
 local one_bg = colors.one_bg
@@ -77,10 +77,8 @@ end
 -- [[ Plugin Highlights
 
 -- Dashboard
-fg("DashboardCenter", grey_fg)
-fg("DashboardFooter", grey_fg)
-fg("DashboardHeader", grey_fg)
-fg("DashboardShortcut", grey_fg)
+fg("AlphaHeader", grey_fg)
+fg("AlphaButtons", light_grey)
 
 -- Git signs
 fg_bg("DiffAdd", blue, "NONE")
@@ -91,6 +89,7 @@ fg_bg("DiffDelete", red, "NONE")
 
 -- Indent blankline plugin
 fg("IndentBlanklineChar", line)
+fg("IndentBlanklineSpaceChar", line)
 
 -- Lsp diagnostics
 
@@ -166,8 +165,4 @@ if ui.transparency then
    bg("TelescopePromptPrefix", "NONE")
    fg("TelescopeBorder", one_bg)
    fg_bg("TelescopeResultsTitle", black, blue)
-end
-
-if #override ~= 0 then
-   require(override)
 end
