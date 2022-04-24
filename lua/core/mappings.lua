@@ -6,6 +6,7 @@ local map_wrapper = utils.map
 local maps = config.mappings
 local plugin_maps = maps.plugins
 local nvChad_options = config.options.nvChad
+local terminal_options = config.options.terminal
 
 local cmd = vim.cmd
 
@@ -32,8 +33,8 @@ M.misc = function()
       -- http://www.reddit.com/r/vim/comments/2k4cbr/problem_with_gj_and_gk/
       -- empty mode is same as using :map
       -- also don't use g[j|k] when in operator pending mode, so it doesn't alter d, y or c behaviour
-      map_wrapper({"n", "x", "o"}, "j", 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', { expr = true })
-      map_wrapper({"n", "x", "o"}, "k", 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', { expr = true })
+      map_wrapper({ "n", "x", "o" }, "j", 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', { expr = true })
+      map_wrapper({ "n", "x", "o" }, "k", 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', { expr = true })
       map_wrapper("", "<Down>", 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', { expr = true })
       map_wrapper("", "<Up>", 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', { expr = true })
 
@@ -41,9 +42,6 @@ M.misc = function()
       map_wrapper("n", "<Esc>", ":noh <CR>")
 
       -- center cursor when moving (goto_definition)
-
-      -- yank from current cursor to end of line
-      map_wrapper("n", "Y", "yg$")
    end
 
    local function optional_mappings()
@@ -64,8 +62,8 @@ M.misc = function()
          map("i", inav.backward, "<Left>")
          map("i", inav.end_of_line, "<End>")
          map("i", inav.forward, "<Right>")
-         map("i", inav.next_line, "<Up>")
-         map("i", inav.prev_line, "<Down>")
+         map("i", inav.next_line, "<Down>")
+         map("i", inav.prev_line, "<Up>")
          map("i", inav.beginning_of_line, "<ESC>^i")
       end
 
@@ -95,14 +93,40 @@ M.misc = function()
       -- get out of terminal mode
       map("t", term_maps.esc_termmode, "<C-\\><C-n>")
       -- hide a term from within terminal mode
-      map("t", term_maps.esc_hide_termmode, "<C-\\><C-n> :lua require('core.utils').close_buffer() <CR>")
+      map("t", term_maps.esc_hide_termmode, "<CMD>lua require('nvchad.terminal').hide() <CR>")
       -- pick a hidden term
       map("n", term_maps.pick_term, ":Telescope terms <CR>")
       -- Open terminals
       -- TODO this opens on top of an existing vert/hori term, fixme
-      map("n", term_maps.new_horizontal, ":execute 15 .. 'new +terminal' | let b:term_type = 'hori' | startinsert <CR>")
-      map("n", term_maps.new_vertical, ":execute 'vnew +terminal' | let b:term_type = 'vert' | startinsert <CR>")
-      map("n", term_maps.new_window, ":execute 'terminal' | let b:term_type = 'wind' | startinsert <CR>")
+      map(
+         { "n", "t" },
+         term_maps.new_horizontal,
+         "<CMD>lua require('nvchad.terminal').new_or_toggle('horizontal', "
+            .. tostring(terminal_options.window.split_height)
+            .. ")<CR>"
+      )
+      map(
+         { "n", "t" },
+         term_maps.new_vertical,
+         "<CMD>lua require('nvchad.terminal').new_or_toggle('vertical', "
+            .. tostring(terminal_options.window.vsplit_width)
+            .. ")<CR>"
+      )
+      map(
+         { "n", "t" },
+         term_maps.new_float,
+         "<CMD>lua require('nvchad.terminal').new_or_toggle('float')<CR>"
+      )
+
+      -- spawns terminals
+      map(
+         "n",
+         term_maps.spawn_horizontal,
+         ":execute 15 .. 'new +terminal' | let b:term_type = 'hori' | startinsert <CR>"
+      )
+      map("n", term_maps.spawn_vertical, ":execute 'vnew +terminal' | let b:term_type = 'vert' | startinsert <CR>")
+      map("n", term_maps.spawn_window, ":execute 'terminal' | let b:term_type = 'wind' | startinsert <CR>")
+
       -- terminal mappings end --
 
       -- Add Packer commands because we are not loading it at startup
